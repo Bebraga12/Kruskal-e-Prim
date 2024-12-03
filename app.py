@@ -1,22 +1,20 @@
 import numpy as np
 
-# Função para o algoritmo de Prim
 def prim_algorithm(graph, start):
     n = len(graph)
-    visited = set()  # Conjunto de vértices visitados
-    edges = []       # Arestas escolhidas
+    visited = set()  
+    edges = []       
     total_weight = 0
 
     visited.add(start)
     
     while len(visited) < n:
-        min_edge = (None, None, float('inf'))  # (origem, destino, peso)
+        min_edge = (None, None, float('inf'))
         for u in visited:
             for v in range(n):
                 if v not in visited and graph[u][v] > 0 and graph[u][v] < min_edge[2]:
                     min_edge = (u, v, graph[u][v])
         
-        # Adicionar a menor aresta encontrada
         if min_edge[0] is not None:
             edges.append((min_edge[0], min_edge[1], min_edge[2]))
             total_weight += min_edge[2]
@@ -24,23 +22,19 @@ def prim_algorithm(graph, start):
     
     return edges, total_weight
 
-# Função para o algoritmo de Kruskal
 def kruskal_algorithm(graph):
     n = len(graph)
     edges = []
     parent = list(range(n))
     rank = [0] * n
 
-    # Criar uma lista de arestas com pesos
     for i in range(n):
         for j in range(i + 1, n):
             if graph[i][j] > 0:
                 edges.append((i, j, graph[i][j]))
 
-    # Ordenar as arestas pelo peso
     edges.sort(key=lambda x: x[2])
 
-    # Funções auxiliares para o Union-Find
     def find(v):
         if parent[v] != v:
             parent[v] = find(parent[v])
@@ -61,7 +55,6 @@ def kruskal_algorithm(graph):
     mst = []
     total_weight = 0
 
-    # Montar a árvore geradora mínima
     for u, v, weight in edges:
         if find(u) != find(v):
             union(u, v)
@@ -70,14 +63,12 @@ def kruskal_algorithm(graph):
     
     return mst, total_weight
 
-# Interface para o usuário
 def main():
     print("Escolha o algoritmo para encontrar a Árvore Geradora Mínima:")
     print("1. Algoritmo de Prim")
     print("2. Algoritmo de Kruskal")
     choice = int(input("Digite 1 ou 2: "))
     
-    # Entrada da matriz de adjacência
     print("\nInsira a matriz de adjacência (digite uma linha de cada vez, separada por espaços):")
     graph = []
     while True:
@@ -102,7 +93,6 @@ def main():
         print("Opção inválida.")
         return
     
-    # Exibir resultado
     for edge in edges:
         print(f"Aresta {edge[0]} -> {edge[1]} com peso {edge[2]}")
     print(f"Peso total da AGM: {total_weight}")
